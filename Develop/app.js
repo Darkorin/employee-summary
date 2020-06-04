@@ -33,3 +33,84 @@ const render = require("./lib/htmlRenderer");
 // for further information. Be sure to test out each class and verify it generates an
 // object with the correct structure and methods. This structure will be crucial in order
 // for the provided `render` function to work! ```
+
+const employeeArray = []
+
+Console.log("To help you generate a team page I will need some information about your team members.");
+const promptEmployeeInfo = () => {
+
+    const promptInternInfo = (name, id, email) => {
+        inquirer.prompt({
+            type: "input",
+            message: "Entern the intern's school",
+            name: "school"
+        }).then(({ school }) => {
+            employeeArray.push(new Intern(name, id, email, school));
+        })
+    }
+
+    const promptEngineerInfo = (name, id, email) => {
+        inquirer.prompt({
+            type: "input",
+            message: "Entern the engineer's github",
+            name: "github"
+        }).then(({ school }) => {
+            employeeArray.push(new Engineer(name, id, email, github));
+        })
+    }
+
+    const promptManagerInfo = (name, id, email) => {
+        inquirer.prompt({
+            type: "number",
+            message: "Entern the manager's office number",
+            name: "officeNumber"
+        }).then(({ school }) => {
+            employeeArray.push(new Manager(name, id, email, officeNumber));
+        })
+    }
+
+    Console.log("Tell me about an employee:");
+    inquirer.prompt([{
+        type: "input",
+        message: "What is this Employee's name?",
+        name: "name"
+    }, {
+        type: "number",
+        message: "What is this employee's ID number?",
+        name: "id"
+    }, {
+        type: "input",
+        message: "What is this employee's email address?",
+        name: "email"
+    }, {
+        type: "list",
+        message: "What is this employee's role?",
+        choices: ["Intern", "Engineer", "Manager"],
+        name: "role"
+    }]).then(({ name, id, email, role }, error) => {
+        switch (role) {
+            case "Intern":
+                promptInternInfo(name, id, email);
+                break;
+            case "Engineer":
+                promptEngineerInfo(name, id, email);
+                break;
+            case "Manager":
+                promptManagerInfo(name, id, email);
+                break;
+            default: 
+                throw error;
+        }
+        inquirer.prompt({
+            type: "confirm",
+            message: "Add another employee?",
+            name: "nextEmployee"
+        }).then(({nextEmployee}) => {
+            if (nextEmployee) {
+                promptEmployeeInfo();
+            } else {
+                render();
+            }
+        })
+    })
+}
