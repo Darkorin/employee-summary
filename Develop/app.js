@@ -34,6 +34,10 @@ const render = require("./lib/htmlRenderer");
 // object with the correct structure and methods. This structure will be crucial in order
 // for the provided `render` function to work! ```
 
+const renderTeam = employeeArray => {
+    fs.writeFile(outputPath, render(employeeArray), () =>{} );
+}
+
 const promptTeamInfo = () => {
 
     const promptInternInfo = (name, id, email) => {
@@ -51,7 +55,7 @@ const promptTeamInfo = () => {
                 if (nextEmployee) {
                     promptEmployeeInfo();
                 } else {
-                    render.render(employeeArray);
+                    renderTeam(employeeArray);
                 }
             })
         })
@@ -72,7 +76,7 @@ const promptTeamInfo = () => {
                 if (nextEmployee) {
                     promptEmployeeInfo();
                 } else {
-                    render(employeeArray);
+                    renderTeam(employeeArray);
                 }
             })
         })
@@ -93,7 +97,7 @@ const promptTeamInfo = () => {
                 if (nextEmployee) {
                     promptEmployeeInfo();
                 } else {
-                    render(employeeArray);
+                    renderTeam(employeeArray);
                 }
             })
         })
@@ -112,7 +116,19 @@ const promptTeamInfo = () => {
         }, {
             type: "input",
             message: "What is this employee's email address?",
-            name: "email"
+            name: "email",
+            validate: function (email) {
+                
+                // I got this from Google I have no idea how this works but it does!
+                valid = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)
+    
+                if (valid) {
+                    return true;
+                } else {
+                    console.log(".  Please enter a valid email")
+                    return false;
+                }
+            }
         }, {
             type: "list",
             message: "What is this employee's role?",
@@ -134,10 +150,13 @@ const promptTeamInfo = () => {
             }
         })
     }
+
+    const employeeArray = [];
+    
     promptEmployeeInfo();
 }
 
-const employeeArray = [];
+
 
 console.log("To help you generate a team page I will need some information about your team members.");
 promptTeamInfo();
