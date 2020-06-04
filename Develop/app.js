@@ -36,8 +36,7 @@ const render = require("./lib/htmlRenderer");
 
 const employeeArray = []
 
-Console.log("To help you generate a team page I will need some information about your team members.");
-const promptEmployeeInfo = () => {
+const promptTeamInfo = () => {
 
     const promptInternInfo = (name, id, email) => {
         inquirer.prompt({
@@ -54,7 +53,7 @@ const promptEmployeeInfo = () => {
             type: "input",
             message: "Entern the engineer's github",
             name: "github"
-        }).then(({ school }) => {
+        }).then(({ github }) => {
             employeeArray.push(new Engineer(name, id, email, github));
         })
     }
@@ -64,53 +63,59 @@ const promptEmployeeInfo = () => {
             type: "number",
             message: "Entern the manager's office number",
             name: "officeNumber"
-        }).then(({ school }) => {
+        }).then(({ officeNumber }) => {
             employeeArray.push(new Manager(name, id, email, officeNumber));
         })
     }
 
-    Console.log("Tell me about an employee:");
-    inquirer.prompt([{
-        type: "input",
-        message: "What is this Employee's name?",
-        name: "name"
-    }, {
-        type: "number",
-        message: "What is this employee's ID number?",
-        name: "id"
-    }, {
-        type: "input",
-        message: "What is this employee's email address?",
-        name: "email"
-    }, {
-        type: "list",
-        message: "What is this employee's role?",
-        choices: ["Intern", "Engineer", "Manager"],
-        name: "role"
-    }]).then(({ name, id, email, role }, error) => {
-        switch (role) {
-            case "Intern":
-                promptInternInfo(name, id, email);
-                break;
-            case "Engineer":
-                promptEngineerInfo(name, id, email);
-                break;
-            case "Manager":
-                promptManagerInfo(name, id, email);
-                break;
-            default: 
-                throw error;
-        }
-        inquirer.prompt({
-            type: "confirm",
-            message: "Add another employee?",
-            name: "nextEmployee"
-        }).then(({nextEmployee}) => {
-            if (nextEmployee) {
-                promptEmployeeInfo();
-            } else {
-                render(employeeArray);
+    const promptEmployeeInfo = () => {
+        console.log("Tell me about an employee:");
+        inquirer.prompt([{
+            type: "input",
+            message: "What is this Employee's name?",
+            name: "name"
+        }, {
+            type: "number",
+            message: "What is this employee's ID number?",
+            name: "id"
+        }, {
+            type: "input",
+            message: "What is this employee's email address?",
+            name: "email"
+        }, {
+            type: "list",
+            message: "What is this employee's role?",
+            choices: ["Intern", "Engineer", "Manager"],
+            name: "role"
+        }]).then(({ name, id, email, role }, error) => {
+            switch (role) {
+                case "Intern":
+                    promptInternInfo(name, id, email);
+                    break;
+                case "Engineer":
+                    promptEngineerInfo(name, id, email);
+                    break;
+                case "Manager":
+                    promptManagerInfo(name, id, email);
+                    break;
+                default:
+                    throw error;
             }
+            inquirer.prompt({
+                type: "confirm",
+                message: "Add another employee?",
+                name: "nextEmployee"
+            }).then(({ nextEmployee }) => {
+                if (nextEmployee) {
+                    promptEmployeeInfo();
+                } else {
+                    render(employeeArray);
+                }
+            })
         })
-    })
+    }
+    promptEmployeeInfo();
 }
+
+console.log("To help you generate a team page I will need some information about your team members.");
+promptTeamInfo();
