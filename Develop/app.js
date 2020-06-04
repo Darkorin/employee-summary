@@ -119,7 +119,7 @@ const promptTeamInfo = () => {
             name: "email",
             validate: function (email) {
                 
-                // I got this from Google I have no idea how this works but it does!
+                // I got this regex from Google to validate the email pattern.
                 valid = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)
     
                 if (valid) {
