@@ -14,6 +14,7 @@ A Node Team Generator that prompts the user using Inquirer and generates an HTML
 * [License](#License)
         
 ## Installation
+Use of this program requires an installation of Node.js
 Clone this repo to you computer, navigate to the repo folder in your terminal and execute the following Command: <pre><code>Node Develop/app</code></pre>
         
 ## Usage
