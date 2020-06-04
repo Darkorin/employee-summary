@@ -34,8 +34,6 @@ const render = require("./lib/htmlRenderer");
 // object with the correct structure and methods. This structure will be crucial in order
 // for the provided `render` function to work! ```
 
-const employeeArray = []
-
 const promptTeamInfo = () => {
 
     const promptInternInfo = (name, id, email) => {
@@ -45,6 +43,17 @@ const promptTeamInfo = () => {
             name: "school"
         }).then(({ school }) => {
             employeeArray.push(new Intern(name, id, email, school));
+            inquirer.prompt({
+                type: "confirm",
+                message: "Add another employee?",
+                name: "nextEmployee"
+            }).then(({ nextEmployee }) => {
+                if (nextEmployee) {
+                    promptEmployeeInfo();
+                } else {
+                    render.render(employeeArray);
+                }
+            })
         })
     }
 
@@ -55,6 +64,17 @@ const promptTeamInfo = () => {
             name: "github"
         }).then(({ github }) => {
             employeeArray.push(new Engineer(name, id, email, github));
+            inquirer.prompt({
+                type: "confirm",
+                message: "Add another employee?",
+                name: "nextEmployee"
+            }).then(({ nextEmployee }) => {
+                if (nextEmployee) {
+                    promptEmployeeInfo();
+                } else {
+                    render(employeeArray);
+                }
+            })
         })
     }
 
@@ -65,6 +85,17 @@ const promptTeamInfo = () => {
             name: "officeNumber"
         }).then(({ officeNumber }) => {
             employeeArray.push(new Manager(name, id, email, officeNumber));
+            inquirer.prompt({
+                type: "confirm",
+                message: "Add another employee?",
+                name: "nextEmployee"
+            }).then(({ nextEmployee }) => {
+                if (nextEmployee) {
+                    promptEmployeeInfo();
+                } else {
+                    render(employeeArray);
+                }
+            })
         })
     }
 
@@ -101,21 +132,12 @@ const promptTeamInfo = () => {
                 default:
                     throw error;
             }
-            inquirer.prompt({
-                type: "confirm",
-                message: "Add another employee?",
-                name: "nextEmployee"
-            }).then(({ nextEmployee }) => {
-                if (nextEmployee) {
-                    promptEmployeeInfo();
-                } else {
-                    render(employeeArray);
-                }
-            })
         })
     }
     promptEmployeeInfo();
 }
+
+const employeeArray = [];
 
 console.log("To help you generate a team page I will need some information about your team members.");
 promptTeamInfo();
