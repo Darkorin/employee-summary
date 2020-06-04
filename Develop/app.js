@@ -109,7 +109,7 @@ const promptEmployeeInfo = () => {
             if (nextEmployee) {
                 promptEmployeeInfo();
             } else {
-                render();
+                render(employeeArray);
             }
         })
     })
